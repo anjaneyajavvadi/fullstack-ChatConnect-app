@@ -104,7 +104,7 @@ const useAuthStore = create((set,get) => ({
         });
     
         newSocket.on("disconnect", () => {
-            console.log("❌ Disconnected from Socket.IO");
+            
             set({ socket: null });
         });
     
