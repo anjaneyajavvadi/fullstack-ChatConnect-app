@@ -15,22 +15,26 @@ const __dirname=path.resolve();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: ["http://localhost:5173", "https://your-deployed-frontend.com"],
-    credentials: true,
-}));
+    origin:"http://localhost:5173",
+    credentials:true,
+}))
 
 app.use("/api/auth",authRoutes);
 app.use('/api/messages',messageRoutes);
 
-if(process.env.NODE_ENV==="production")
-{
+if (process.env.NODE_ENV === "production") {
     const frontendPath = path.join(__dirname, "../frontend/chat-app/dist");
-app.use(express.static(frontendPath));
+    app.use(express.static(frontendPath));
 
-app.get("*", (req, res) => {
-    res.sendFile(path.join(frontendPath, "index.html"));
-});
+    app.get("*", (req, res, next) => {
+        if (!req.path.startsWith("/api")) {
+            res.sendFile(path.join(frontendPath, "index.html"));
+        } else {
+            next(); // ✅ Ensures API routes still work
+        }
+    });
 }
+
 
 server.listen(PORT,()=>{
     console.log(`app is listening on http://localhost:${PORT}`);
