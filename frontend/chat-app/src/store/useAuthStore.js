@@ -100,7 +100,6 @@ const useAuthStore = create((set,get) => ({
             }
         });
         newSocket.on("connect", () => {
-            console.log("✅ Connected to Socket.IO:", newSocket.id);
             set({ socket: newSocket }); // ✅ Store socket instance
         });
     
